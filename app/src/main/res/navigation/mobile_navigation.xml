@@ -10,7 +10,12 @@
         android:name="com.example.seniorproject.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
-
+    <fragment
+        android:id="@+id/nav_map"
+        android:name="com.example.seniorproject.ui.map.MapFragment"
+        android:label="@string/menu_map"
+        tools:layout="@layout/fragment_map" />
+        />
     <fragment
         android:id="@+id/nav_gallery"
         android:name="com.example.seniorproject.ui.gallery.GalleryFragment"
@@ -29,15 +34,5 @@
         android:label="@string/menu_tools"
         tools:layout="@layout/fragment_tools" />
 
-    <fragment
-        android:id="@+id/nav_share"
-        android:name="com.example.seniorproject.ui.share.ShareFragment"
-        android:label="@string/menu_share"
-        tools:layout="@layout/fragment_share" />
 
-    <fragment
-        android:id="@+id/nav_send"
-        android:name="com.example.seniorproject.ui.send.SendFragment"
-        android:label="@string/menu_send"
-        tools:layout="@layout/fragment_send" />
 </navigation>
