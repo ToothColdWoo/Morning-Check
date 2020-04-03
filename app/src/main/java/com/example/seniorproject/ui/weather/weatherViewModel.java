@@ -1,16 +1,16 @@
-package com.example.seniorproject.ui.gallery;
+package com.example.seniorproject.ui.weather;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class GalleryViewModel extends ViewModel {
+public class weatherViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public GalleryViewModel() {
+    public weatherViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is gallery fragment");
+        mText.setValue("This is weather fragment");
     }
 
     public LiveData<String> getText() {

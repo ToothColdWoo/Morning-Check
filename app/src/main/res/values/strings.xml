@@ -9,8 +9,8 @@
 
     <string name="menu_home">Home</string>
     <string name="menu_map">지도</string>
-    <string name="menu_gallery">날씨</string>
-    <string name="menu_slideshow">달구지</string>
-    <string name="menu_tools">시간표</string>
+    <string name="menu_weather">날씨</string>
+    <string name="menu_shuttle">달구지</string>
+    <string name="menu_timetable">시간표</string>
 
 </resources>

@@ -1,14 +1,14 @@
-package com.example.seniorproject.ui.tools;
+package com.example.seniorproject.ui.timetable;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class ToolsViewModel extends ViewModel {
+public class TimeTableViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public ToolsViewModel() {
+    public TimeTableViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is tools fragment");
     }

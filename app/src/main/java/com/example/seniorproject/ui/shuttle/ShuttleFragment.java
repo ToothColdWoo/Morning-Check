@@ -1,4 +1,4 @@
-package com.example.seniorproject.ui.slideshow;
+package com.example.seniorproject.ui.shuttle;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,15 +14,15 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.seniorproject.R;
 
-public class SlideshowFragment extends Fragment {
+public class ShuttleFragment extends Fragment {
 
-    private SlideshowViewModel slideshowViewModel;
+    private ShuttleViewModel slideshowViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         slideshowViewModel =
-                ViewModelProviders.of(this).get(SlideshowViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_slideshow, container, false);
+                ViewModelProviders.of(this).get(ShuttleViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_shuttle, container, false);
         final TextView textView = root.findViewById(R.id.text_slideshow);
         slideshowViewModel.getText().observe(this, new Observer<String>() {
             @Override
