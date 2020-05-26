@@ -18,15 +18,17 @@ import androidx.fragment.app.Fragment;
 
 import com.example.seniorproject.BuildConfig;
 import com.example.seniorproject.R;
+import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapView;
 
 
 
-public class MapFragment extends Fragment  {
+public class MapFragment extends Fragment{
     private View view;
     private LinearLayout linearLayoutTmap;
     TMapView tmap;
-
+    boolean camera = false;
+    BusParsing busParsing;
     private String apiKey = BuildConfig.API_KEY;
 
 
@@ -36,14 +38,36 @@ public class MapFragment extends Fragment  {
                              ViewGroup container, Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_map,container,false);
+        busParsing = new BusParsing();
 
         linearLayoutTmap = (LinearLayout)view.findViewById(R.id.linearLayoutTmap);
         tmap = new TMapView(getActivity());
         tmap.setSKTMapApiKey(apiKey);
         linearLayoutTmap.addView(tmap);
 
-
+        tmap.setIconVisibility(true);
         setGps();
+
+        tmap.setOnEnableScrollWithZoomLevelListener(new TMapView.OnEnableScrollWithZoomLevelCallback() {
+            @Override
+            public void onEnableScrollWithZoomLevelEvent(float v, TMapPoint tMapPoint) {
+                tmap.setIconVisibility(false);
+            }
+        });
+
+        tmap.setOnDisableScrollWithZoomLevelListener(new TMapView.OnDisableScrollWithZoomLevelCallback() {
+            @Override
+            public void onDisableScrollWithZoomLevelEvent(float v, TMapPoint tMapPoint) {
+                double longitude =tMapPoint.getLongitude();
+                double latitude = tMapPoint.getLatitude();
+                tmap.setLocationPoint(longitude, latitude);
+                tmap.setCenterPoint(longitude, latitude);
+                tmap.setIconVisibility(true);
+
+                busParsing.setLatitude(latitude);
+                busParsing.setLongitude(longitude);
+            }
+        });
 
         return view;
     }
@@ -56,8 +80,10 @@ public class MapFragment extends Fragment  {
                 double longitude = location.getLongitude();
                 tmap.setLocationPoint(longitude, latitude);
                 tmap.setCenterPoint(longitude, latitude);
-                tmap.setIconVisibility(true);
+                busParsing.setLongitude(longitude);
+                busParsing.setLatitude(latitude);
             }
+
         }
 
         @Override
@@ -74,7 +100,9 @@ public class MapFragment extends Fragment  {
         public void onProviderDisabled(String provider) {
 
         }
+
     };
+
 
     public void setGps() {
         final LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);

@@ -20,6 +20,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "API_KEY", localProperties['apiKey']
+        buildConfigField "String", "BUS_KEY", localProperties['busServiceKey']
     }
     buildTypes {
         release {
