@@ -42,7 +42,7 @@ public class MapFragment extends Fragment  {
         tmap.setSKTMapApiKey(apiKey);
         linearLayoutTmap.addView(tmap);
 
-        tmap.setIconVisibility(true);
+
         setGps();
 
         return view;
@@ -56,6 +56,7 @@ public class MapFragment extends Fragment  {
                 double longitude = location.getLongitude();
                 tmap.setLocationPoint(longitude, latitude);
                 tmap.setCenterPoint(longitude, latitude);
+                tmap.setIconVisibility(true);
             }
         }
 
