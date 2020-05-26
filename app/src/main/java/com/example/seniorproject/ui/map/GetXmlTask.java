@@ -24,6 +24,7 @@ import org.w3c.dom.Text;
 import org.w3c.dom.UserDataHandler;
 import org.xml.sax.InputSource;
 
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -37,14 +38,11 @@ public class GetXmlTask extends AsyncTask<Double, Void, ArrayList> {
     protected void onPreExecute() {
         super.onPreExecute();
 
-        BusParsing busParsing = new BusParsing();
-        lat = busParsing.getLatitude();
-        lon = busParsing.getLongitude();
     }
 
     @Override
     protected ArrayList doInBackground(Double... doubles) {
-        URL url;
+
         ArrayList<String> resultList = new ArrayList<>();
 
         ArrayList<String> centerYnList = new ArrayList<>();
@@ -399,21 +397,26 @@ public class GetXmlTask extends AsyncTask<Double, Void, ArrayList> {
         };
         try {
             String key = BuildConfig.BUS_KEY;
-            url = new URL("http://openapi.gbis.go.kr/ws/rest/busstationservice/searcharound?serviceKey=" + key + "&x=" + doubles[0] + "&y=" + doubles[1]);
+            String urlString = "http://openapi.gbis.go.kr/ws/rest/busstationservice/searcharound?serviceKey=" + key + "&x=" + doubles[0] + "&y=" + doubles[1];
+            URL url = new URL(urlString);
+
+            Log.d("tttt", url.toString());
+
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
 
-            doc = db.parse(new InputSource(url.openStream()));
+            doc = db.parse(urlString);
             doc.getDocumentElement().normalize();
+
         }
         catch (Exception e){
-            e.printStackTrace();
+           e.printStackTrace();
         }
 
         NodeList nodeList = doc.getElementsByTagName("busStationAroundList");
         NodeList elementNumber = doc.getElementsByTagName("centerYn");
-        int elemetnCount = elementNumber.getLength();
-        int max = nodeList.getLength();
+
+        int max =nodeList.getLength();
 
         for(int i = 0; i < max; i++){
             Node node = nodeList.item(i);

@@ -7,6 +7,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.example.seniorproject.R;
 import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapView;
 
+import java.util.ArrayList;
 
 
 public class MapFragment extends Fragment{
@@ -28,7 +30,28 @@ public class MapFragment extends Fragment{
     private LinearLayout linearLayoutTmap;
     TMapView tmap;
     boolean camera = false;
-    BusParsing busParsing;
+
+
+    double lat;
+    double lon;
+//
+int elementCount;
+    int busStationListCount;
+
+    public double latitude;
+    public double longitude;
+    ArrayList<String> list;
+    ArrayList<String> centerYn = new ArrayList();
+    ArrayList<String> districtCd = new ArrayList();
+    ArrayList<String> mobileNo = new ArrayList();
+    ArrayList<String> regionName = new ArrayList();
+    ArrayList<String> stationId = new ArrayList();
+    ArrayList<String> stationName = new ArrayList();
+    ArrayList<String> x = new ArrayList();
+    ArrayList<String> y = new ArrayList();
+    ArrayList<String> distance = new ArrayList();
+ //
+
     private String apiKey = BuildConfig.API_KEY;
 
 
@@ -38,7 +61,7 @@ public class MapFragment extends Fragment{
                              ViewGroup container, Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_map,container,false);
-        busParsing = new BusParsing();
+
 
         linearLayoutTmap = (LinearLayout)view.findViewById(R.id.linearLayoutTmap);
         tmap = new TMapView(getActivity());
@@ -48,6 +71,11 @@ public class MapFragment extends Fragment{
         tmap.setIconVisibility(true);
         setGps();
 
+
+        //
+
+
+        //
         tmap.setOnEnableScrollWithZoomLevelListener(new TMapView.OnEnableScrollWithZoomLevelCallback() {
             @Override
             public void onEnableScrollWithZoomLevelEvent(float v, TMapPoint tMapPoint) {
@@ -63,9 +91,46 @@ public class MapFragment extends Fragment{
                 tmap.setLocationPoint(longitude, latitude);
                 tmap.setCenterPoint(longitude, latitude);
                 tmap.setIconVisibility(true);
+                lat = latitude;
+                lon = longitude;
 
-                busParsing.setLatitude(latitude);
-                busParsing.setLongitude(longitude);
+                //
+                GetXmlTask getXmlTask = new GetXmlTask();
+
+                try {
+
+                    list = getXmlTask.execute(lon,lat).get();
+                    elementCount = 9;
+                    busStationListCount = list.size()/elementCount;
+                    for(int i =0; i <list.size(); i++){
+                        centerYn.add(list.get(i++));
+                        districtCd.add(list.get(i++));
+                        mobileNo.add(list.get(i++));
+                        regionName.add(list.get(i++));
+                        stationId.add(list.get(i++));
+                        stationName.add(list.get(i++));
+                        x.add(list.get(i++));
+                        y.add(list.get(i++));
+                        distance.add(list.get(i));
+                    }
+                    for(int i =0; i <list.size(); i++){
+                        Log.d("tttt", centerYn.get(i) + " : centerYn " + i + "\n");
+                        Log.d("tttt", districtCd.get(i) + " : districtCd " + i + "\n");
+                        Log.d("tttt", mobileNo.get(i) + " : mobileNo " + i + "\n");
+                        Log.d("tttt", regionName.get(i) + " : regionName " + i + "\n");
+                        Log.d("tttt", stationId.get(i) + " : stationId " + i + "\n");
+                        Log.d("tttt", stationName.get(i) + " : stationName " + i + "\n");
+                        Log.d("tttt", x.get(i) + " : x " + i + "\n");
+                        Log.d("tttt", y.get(i) + " : y " + i + "\n");
+                        Log.d("tttt", distance.get(i) + " : distance " + i + "\n");
+                        Log.d("tttt", "\n");
+                    }
+
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+                //
             }
         });
 
@@ -80,8 +145,8 @@ public class MapFragment extends Fragment{
                 double longitude = location.getLongitude();
                 tmap.setLocationPoint(longitude, latitude);
                 tmap.setCenterPoint(longitude, latitude);
-                busParsing.setLongitude(longitude);
-                busParsing.setLatitude(latitude);
+                lat = latitude;
+                lon = longitude;
             }
 
         }
