@@ -1,3 +1,6 @@
+//2번코드
+
+
 package com.example.seniorproject.ui.map;
 
 import android.Manifest;
@@ -7,6 +10,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +23,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.seniorproject.BuildConfig;
 import com.example.seniorproject.R;
+import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapView;
 
 
@@ -39,9 +44,8 @@ public class MapFragment extends Fragment{
         linearLayoutTmap = (LinearLayout)view.findViewById(R.id.linearLayoutTmap);
         tmap = new TMapView(getActivity());
         tmap.setSKTMapApiKey(apiKey);
-        linearLayoutTmap.addView(tmap);
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-
+        linearLayoutTmap.addView(tmap);
         tmap.setOnApiKeyListener(new TMapView.OnApiKeyListenerCallback() {
             @Override
             public void SKTMapApikeySucceed() {
@@ -49,12 +53,28 @@ public class MapFragment extends Fragment{
                     @Override
                     public void run() {
                         setupMap();
+                        setBusStation();
                     }
                 });
             }
 
             @Override
             public void SKTMapApikeyFailed(String s) {
+            }
+        });
+
+        tmap.setOnEnableScrollWithZoomLevelListener(new TMapView.OnEnableScrollWithZoomLevelCallback() {
+            @Override
+            public void onEnableScrollWithZoomLevelEvent(float v, TMapPoint tMapPoint) {
+                tmap.setIconVisibility(false);
+            }
+        });
+
+        tmap.setOnDisableScrollWithZoomLevelListener(new TMapView.OnDisableScrollWithZoomLevelCallback() {
+            @Override
+            public void onDisableScrollWithZoomLevelEvent(float v, TMapPoint tMapPoint) {
+                Log.d("tttt", "Screen Scrolled");
+                tmap.setIconVisibility(true);
 
             }
         });
@@ -73,6 +93,9 @@ public class MapFragment extends Fragment{
             setMyLocation(cacheLocation.getLatitude(), cacheLocation.getLongitude());
         }
 
+    }
+
+    private void setBusStation() {
     }
 
     @Override
