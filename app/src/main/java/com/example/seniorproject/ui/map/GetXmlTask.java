@@ -37,7 +37,6 @@ public class GetXmlTask extends AsyncTask<Double, Void, ArrayList> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-
     }
 
     @Override
@@ -395,6 +394,7 @@ public class GetXmlTask extends AsyncTask<Double, Void, ArrayList> {
                 return null;
             }
         };
+
         try {
             String key = BuildConfig.BUS_KEY;
             String urlString = "http://openapi.gbis.go.kr/ws/rest/busstationservice/searcharound?serviceKey=" + key + "&x=" + doubles[0] + "&y=" + doubles[1];
@@ -416,7 +416,16 @@ public class GetXmlTask extends AsyncTask<Double, Void, ArrayList> {
         NodeList nodeList = doc.getElementsByTagName("busStationAroundList");
         NodeList elementNumber = doc.getElementsByTagName("centerYn");
 
-        int max =nodeList.getLength();
+        int max=0;
+
+        if(nodeList == null) {
+            Log.d("tttt", "null returned");
+        }
+        else{
+            max = nodeList.getLength();
+        }
+
+
 
         for(int i = 0; i < max; i++){
             Node node = nodeList.item(i);
