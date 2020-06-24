@@ -6,6 +6,9 @@ package com.example.seniorproject.ui.map;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -24,14 +27,23 @@ import androidx.fragment.app.Fragment;
 
 import com.example.seniorproject.BuildConfig;
 import com.example.seniorproject.R;
+import com.odsay.odsayandroidsdk.API;
+import com.odsay.odsayandroidsdk.ODsayData;
+import com.odsay.odsayandroidsdk.ODsayService;
+import com.odsay.odsayandroidsdk.OnResultCallbackListener;
 import com.skt.Tmap.TMapMarkerItem;
+import com.skt.Tmap.TMapOverlay;
+import com.skt.Tmap.TMapOverlayItem;
 import com.skt.Tmap.TMapPoint;
+import com.skt.Tmap.TMapPolygon;
 import com.skt.Tmap.TMapView;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
 
-public class MapFragment extends Fragment{
+public class MapFragment extends Fragment {
 
     TMapView tmap;
     View view;
@@ -57,8 +69,43 @@ public class MapFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_map,container,false);
+        view = inflater.inflate(R.layout.fragment_map, container, false);
 
+//        ODsayService odsayService = ODsayService.init(getActivity(), "+rWFwGyP932knYzQhuPoTnxZAQkT/OxFT7mkTiqYSKI");
+//
+//        odsayService.setReadTimeout(5000);
+//        odsayService.setConnectionTimeout(5000);
+//
+//        OnResultCallbackListener onResultCallbackListener = new OnResultCallbackListener() {
+//            @Override
+//            public void onSuccess(ODsayData oDsayData, API api) {
+//                try {
+//                    if (api == API.BUS_STATION_INFO) {
+//                        Log.d("tttt", "됨?");
+//                        String stationName = oDsayData.getJson().getJSONObject("result").getString("stationName");
+//                        Log.d("Station name : %s", stationName);
+//                    }
+//                } catch (JSONException e) {
+//                    Log.d("tttt", "Errstart");
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onError(int i, String s, API api) {
+//                Log.d("tttt", "아예안된다");
+//                if (api == API.BUS_STATION_INFO) {
+//                }
+//            }
+//        };
+//
+//        odsayService.requestBusStationInfo("107475", onResultCallbackListener);
+//
+//
+//        return view;
+//    }
+
+//}
 
         linearLayoutTmap = (LinearLayout)view.findViewById(R.id.linearLayoutTmap);
         tmap = new TMapView(getActivity());
@@ -98,8 +145,6 @@ public class MapFragment extends Fragment{
         tmap.setOnEnableScrollWithZoomLevelListener(new TMapView.OnEnableScrollWithZoomLevelCallback() {
             @Override
             public void onEnableScrollWithZoomLevelEvent(float v, TMapPoint tMapPoint) {
-
-                tmap.setIconVisibility(false);
                 deleteMarker();
             }
         });
@@ -107,10 +152,10 @@ public class MapFragment extends Fragment{
         tmap.setOnDisableScrollWithZoomLevelListener(new TMapView.OnDisableScrollWithZoomLevelCallback() {
             @Override
             public void onDisableScrollWithZoomLevelEvent(float v, TMapPoint tMapPoint) {
+
                 Log.d("tttt", "Screen Scrolled");
-                Log.d("tttt", tmap.getLatitude() + " : lat ");
-                Log.d("tttt", tmap.getLongitude() + " : long");
-                tmap.setIconVisibility(true);
+                setMyBusStation(tmap.getLongitude(), tmap.getLatitude());
+
             }
         });
 
@@ -150,6 +195,7 @@ public class MapFragment extends Fragment{
                 distance.add(list.get(i));
             }
 
+            deleteMarker();
             for(int i =0; i <list.size(); i++){
                 Log.d("tttt", centerYn.get(i) + " : centerYn " + i + "\n");
                 Log.d("tttt", districtCd.get(i) + " : districtCd " + i + "\n");
@@ -165,6 +211,7 @@ public class MapFragment extends Fragment{
                 double lon = Double.parseDouble(x.get(i));
                 double lat = Double.parseDouble(y.get(i));
                 addMarker(i, lat, lon);
+
             }
         }
         catch (Exception e){
@@ -175,9 +222,25 @@ public class MapFragment extends Fragment{
 
     private void addMarker(int i, double latitude, double longitude) {
                 TMapPoint point = new TMapPoint(latitude,longitude);
+                Context mContext = getActivity();
+                //
+//                MarkerOverlay marker = new MarkerOverlay(mContext, "custon", "marker!!!!!");
+//
+//                String strID="TMapMarkerItem2";
+//
+//                Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.marker);
+//
+//                marker.setIcon(bitmap);
+//
+//                marker.getTMapPoint();
+//                marker.setID(strID);
+//                marker.setTMapPoint(new TMapPoint(point.getLatitude(), point.getLongitude()));
+//                tmap.addMarkerItem2(strID, marker);
                 TMapMarkerItem marker = new TMapMarkerItem();
+
                 marker.setTMapPoint(point);
                 tmap.addMarkerItem(i+ "", marker);
+
     }
 
     private void deleteMarker() {
@@ -251,3 +314,4 @@ public class MapFragment extends Fragment{
     };
 
 }
+
